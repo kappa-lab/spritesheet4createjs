@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>CreateJS export from ss4cjs_demo</title>
+
+<script src="libs/easeljs-0.5.0.min.js"></script>
+<script src="libs/preloadjs-0.2.0.min.js"></script>
+<script src="ss4cjs_demo.js"></script>
+
+<script>
+var canvas, stage, exportRoot;
+
+function init() {
+	canvas = document.getElementById("canvas");
+	images = images||{};
+
+	var manifest = [
+		{src:"ss.png", id:"ss"},
+		{src:"img1.jpg", id:"img1"},
+		{src:"img2.jpg", id:"img2"},
+		{src:"img3.jpg", id:"img3"}
+	];
+
+	var loader = new createjs.PreloadJS(false);
+	loader.onFileLoad = handleFileLoad;
+	loader.onComplete = handleComplete;
+	loader.loadManifest(manifest);
+}
+
+function handleFileLoad(o) {
+	if (o.type == "image") { images[o.id] = o.result; }
+}
+
+function handleComplete() {
+	exportRoot = new lib.ss4cjs_demo();
+
+	stage = new createjs.Stage(canvas);
+	stage.addChild(exportRoot);
+	stage.update();
+
+	createjs.Ticker.setFPS(24);
+	//createjs.Ticker.addListener(stage);
+}
+</script>
+</head>
+
+<body onload="init();" style="background-color:#D4D4D4">
+	<canvas id="canvas" width="550" height="420" style="background-color:#000000"></canvas>
+</body>
+</html>
